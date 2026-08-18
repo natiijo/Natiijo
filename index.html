@@ -405,19 +405,19 @@
             selectedExamsArr.forEach(exName => {  
                 if (isGrade4) {
                     // Sharciga Gaarka ah ee Fasalka 4aad
-                    if (exName.includes("نصفي")) {  
+                    if (exName.includes("النّصفي")) {  
                         totalPassScoreNeeded += 12.5;  
                         maxTotalScorePossible += 25;  
-                    } else if (exName.includes("نهائي")) {  
+                    } else if (exName.includes("النّهائي")) {  
                         totalPassScoreNeeded += 12.5;  
                         maxTotalScorePossible += 25;  
-                    } else if (exName.includes("شهري 1") || exName.trim() === "1") {  
+                    } else if (exName.includes("الشّهري 1") || exName.trim() === "1") {  
                         totalPassScoreNeeded += 7.5;   
                         maxTotalScorePossible += 15;  
-                    } else if (exName.includes("شهري 2") || exName.trim() === "2") {  
+                    } else if (exName.includes("الشّهري 2") || exName.trim() === "2") {  
                         totalPassScoreNeeded += 7.5;   
                         maxTotalScorePossible += 15;  
-                    } else if (exName.includes("شفوي")) {  
+                    } else if (exName.includes("الشّفوي")) {  
                         totalPassScoreNeeded += 10;  
                         maxTotalScorePossible += 20;  
                     } else {  
@@ -426,10 +426,10 @@
                     }
                 } else {
                     // Sharcigii caadiga ahaa ee Fasalada kale (1aad, 2aad, 3aad)
-                    if (exName.includes("نصفي")) {  
+                    if (exName.includes("النّصفي")) {  
                         totalPassScoreNeeded += 20;  
                         maxTotalScorePossible += 40;  
-                    } else if (exName.includes("نهائي")) {  
+                    } else if (exName.includes("الّنهائي")) {  
                         totalPassScoreNeeded += 30;  
                         maxTotalScorePossible += 60;  
                     } 
