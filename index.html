@@ -1,0 +1,762 @@
+<!DOCTYPE html>  <html lang="ar" dir="rtl">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Natiijada Machadka Al-Ta'sil</title>  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">  <style>  
+    :root {  
+        --primary-color: #1a5928;  
+        --bg-body: #f4f7f6;  
+    }  
+
+    body {  
+        font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+        background-color: var(--bg-body);  
+        margin: 0;  
+        display: flex;  
+        justify-content: center;  
+        align-items: center;  
+        min-height: 100vh;  
+        padding: 20px;  
+    }  
+
+    .login-box {  
+        background: white;  
+        padding: 40px 30px;  
+        border-radius: 20px;  
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);  
+        text-align: center;  
+        width: 100%;  
+        max-width: 400px;  
+        border-top: 6px solid var(--primary-color);  
+    }  
+
+    .school-logo {  
+        width: 100px;  
+        margin-bottom: 20px;  
+    }  
+
+    .input-group {  
+        display: flex;  
+        flex-direction: column;  
+        gap: 15px;  
+        margin-top: 10px;  
+    }  
+
+    input {  
+        padding: 15px;  
+        border: 2px solid #ddd;  
+        border-radius: 12px;  
+        font-size: 16px;  
+        direction: ltr;   
+        text-align: center;  
+        outline: none;  
+        transition: 0.3s;  
+    }  
+
+    input:focus { border-color: var(--primary-color); }  
+
+    .btn-view {  
+        padding: 15px;  
+        background-color: var(--primary-color);  
+        color: white;  
+        border: none;  
+        border-radius: 12px;  
+        font-size: 18px;  
+        font-weight: bold;  
+        cursor: pointer;  
+        transition: 0.2s;  
+    }  
+    .btn-view:disabled {  
+        background-color: #cccccc;  
+        cursor: not-allowed;  
+    }  
+
+    #result-display {  
+        display: none;  
+        width: 100%;  
+        max-width: 650px;  
+        animation: fadeIn 0.5s ease-in-out;  
+    }  
+
+    @keyframes fadeIn {  
+        from { opacity: 0; transform: translateY(10px); }  
+        to { opacity: 1; transform: translateY(0); }  
+    }  
+
+    /* -------------------------------------------  
+       NASHQADDA KAARKA RASMIGA AH (CLASSIC ZOOM)   
+    ------------------------------------------- */  
+    .report-card-wrapper {  
+        width: 100%;  
+        background: #ffffff;  
+        border: 2px solid #000000;  
+        padding: 10px;  
+        box-sizing: border-box;  
+        border-radius: 4px;  
+        box-shadow: 0 5px 25px rgba(0,0,0,0.1);  
+    }  
+
+    .report-card-header-img {  
+        width: 100%;  
+        height: auto;  
+        display: block;  
+        border: 1.5px solid #000000;  
+        margin-bottom: 12px;  
+    }  
+
+    .unified-table {  
+        width: 100%;  
+        border-collapse: collapse;  
+        border: 1.5px solid #000000;  
+        table-layout: auto;   
+    }  
+
+    .unified-table th, .unified-table td {  
+        border: 1.5px solid #000000;  
+        padding: 4px 5px;  
+        font-size: 12px;  
+        color: #000000;  
+        vertical-align: middle;  
+    }  
+
+    .subject-name-cell {  
+        white-space: nowrap;  
+        text-align: right;  
+        font-weight: bold;  
+        padding-right: 6px !important;  
+    }  
+
+    .bg-num { background-color: #f5e6d3 !important; font-weight: bold; text-align: center; }  
+    .bg-sub { background-color: #d1e7dd !important; font-weight: bold; text-align: center; }  
+    .bg-total { background-color: #fff3cd !important; font-weight: bold; text-align: center; }  
+    .bg-summary-header { background-color: #ffffff !important; font-weight: bold; text-align: center; }  
+
+    .text-bold { font-weight: bold; }  
+    .text-center { text-align: center; }  
+
+    .signature-section {  
+        margin-top: 25px;  
+        font-size: 11px;  
+        font-weight: bold;  
+        line-height: 1.8;  
+        text-align: left;  
+        padding-left: 15px;  
+    }  
+
+    /* ACTIONS BUTTONS */  
+    .action-buttons {  
+        margin-top: 20px;  
+        display: flex;  
+        gap: 10px;  
+        justify-content: center;  
+    }  
+
+    .btn-back, .btn-print {  
+        padding: 10px 25px;  
+        border: none;  
+        border-radius: 8px;  
+        cursor: pointer;  
+        font-weight: bold;  
+        font-size: 14px;  
+    }  
+
+    .btn-back { background: #6c757d; color: white; }  
+    .btn-print { background: var(--primary-color); color: white; }  
+
+    /* FONT ONLY COLORS FOR STATUS */  
+    .text-status-gudbay {  
+        color: #1a5928;  
+        font-weight: bold;  
+    }  
+    .text-status-haray {  
+        color: #b02a37;  
+        font-weight: bold;  
+    }  
+
+    /* MARKA SHAASHADDU YARYAHAY (MOBILE) */  
+    @media (max-width: 576px) {  
+        body { padding: 10px; }  
+        .unified-table th, .unified-table td {  
+            padding: 2px 3px;   
+            font-size: 2.4vw;     
+        }  
+        .report-card-wrapper { padding: 6px; }  
+        .signature-section { margin-top: 15px; font-size: 2.2vw; }  
+    }  
+
+    /* PRINT OPTIMIZATION */  
+    @media print {  
+        .no-print { display: none !important; }  
+        body { background-color: #fff; padding: 0; margin: 0; display: block; }  
+        #result-display { max-width: 100% !important; display: block !important; }  
+        .report-card-wrapper { border: 2px solid #000 !important; padding: 12px !important; width: 100% !important; box-shadow: none !important; }  
+        .unified-table th, .unified-table td { font-size: 11px !important; padding: 4px 5px !important; }  
+        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }  
+    }  
+</style>
+
+</head>  
+<body>  <div class="login-box" id="loginArea">  
+    <img src="Log.jpg" alt="Logo" class="school-logo">  
+    <h3 style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin-bottom: 5px;">معهد التأصيل للعلوم الإسلامية والعربية</h3>  
+    <h4 style="font-size: 15px; font-weight: bold; margin-bottom: 15px;">الـــفـــرع الـــثـــانــي</h4>  
+    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Natiijada Ardayga</p>  
+      
+    <div class="input-group">  
+        <input type="text" id="stuID" placeholder="Geli ID-gaaga">  
+        <input type="password" id="stuPass" placeholder="Geli Password-ka ">  
+        <button class="btn-view" id="searchBtn" onclick="checkStudentResultByID()">Raadi Natiijada</button>  
+    </div>  
+      
+    <div id="loadingSpinner" style="display: none; margin-top: 15px; font-weight: bold; color: var(--primary-color); font-size: 13px;">  
+        <i class="fas fa-spinner fa-spin me-1"></i> wax yar sug...  
+    </div>  
+</div>  
+
+<div id="result-display">  
+    <div id="spCardsContainer"></div>  
+      
+    <div class="action-buttons no-print">  
+        <button class="btn-print" onclick="window.print()"><i class="fas fa-print me-1"></i> Daabaco Kaarka</button>  
+        <button class="btn-back" onclick="location.reload()"><i class="fas fa-sign-out-alt me-1"></i> Ka bax (Logout)</button>  
+    </div>  
+</div>
+
+<script type="module">  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";  
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-database.js";  
+  
+    // Firebase Configuration  
+    const firebaseConfig = {   
+        apiKey: "AIzaSyAE0ahywyZLsZ4psRm2u1cCEMciTjx_qgs",   
+        authDomain: "absent-b.firebaseapp.com",   
+        projectId: "absent-b",   
+        databaseURL: "https://absent-b-default-rtdb.firebaseio.com",   
+        appId: "1:45759222162:web:540e1a27ddac1f2fcc314b"   
+    };  
+      
+    const app = initializeApp(firebaseConfig);  
+    const db = getDatabase(app);  
+  
+    let cachedStudentsList = [];  
+    // portal_display: { items:[{year,className}] } (ama qaabka hore: {year,className})
+    const dispItems = (rec) => rec ? (rec.items || (rec.year ? [{ year: rec.year, className: rec.className }] : [])) : [];
+    const stackCards = (cards) => cards.map(c => `<div style="margin-bottom:16px;page-break-after:always;">${c.html}</div>`).join('');
+    let examMaxMarks = [];   // exam_max_marks (admin: "تحديد الحد الأقصى للدرجة")
+    // Ku rar imtixaanada sida ay admin-ku u kala horeysiiyay (order)
+    const sortByOrder = (arr, order) => {
+        const idx = (d) => { const i = (order || []).indexOf(d.examId); return i === -1 ? 1e6 : i; };
+        return arr.map((d, i) => [d, i]).sort((a, b) => (idx(a[0]) - idx(b[0])) || (a[1] - b[1])).map(x => x[0]);
+    };
+  
+    function loadStudentsCache() {  
+        get(ref(db, 'students')).then((snapshot) => {  
+            cachedStudentsList = [];  
+            if (snapshot.exists()) {  
+                snapshot.forEach(child => {  
+                    cachedStudentsList.push({ id: child.key, ...child.val() });  
+                });  
+            }  
+        }).catch(err => console.error("Cilad baa ka dhacday soo jiidashada ardayda:", err));  
+    }  
+    loadStudentsCache();  
+  
+    const fbKey = (v) => String(v).trim().replace(/[.#$\[\]\/]/g, '-');
+
+    function buildCard(targetStudent, foundStudentID, cls, entries) {
+        const allResults = entries;
+        const selectedExamsSet = new Set();
+        const uniqueSubjects = new Set();
+        const classStudentDataMap = {};
+        allResults.forEach(d => {
+            uniqueSubjects.add(d.subjectName);
+            selectedExamsSet.add(d.examName.replace(d.academicYear, "").replace(/[()]/g, "").trim());
+            (d.results || []).forEach(res => {
+                if (!classStudentDataMap[res.studentId]) classStudentDataMap[res.studentId] = { total: 0, id: res.studentId };
+                classStudentDataMap[res.studentId].total += parseFloat(res.score) || 0;
+            });
+        });
+        if (!classStudentDataMap[targetStudent.id]) classStudentDataMap[targetStudent.id] = { total: 0, id: targetStudent.id };
+            const selectedExamsArr = Array.from(selectedExamsSet);      
+            const totalSubjectsCount = uniqueSubjects.size;      
+            const currentAcademicYear = allResults[0].academicYear;      
+  
+            let sortedStudents = Object.values(classStudentDataMap).sort((a, b) => b.total - a.total);      
+            let currentRank = 0, lastTotal = -1;      
+            sortedStudents.forEach((st) => {      
+                if (st.total !== lastTotal) currentRank++;      
+                classStudentDataMap[st.id].rank = currentRank;      
+                lastTotal = st.total;      
+            });      
+  
+            const stInfo = classStudentDataMap[targetStudent.id];      
+            let studentAverage = totalSubjectsCount > 0 ? (stInfo.total / totalSubjectsCount).toFixed(2) : "0.00";      
+  
+            // ----------------------------------------------------------------  
+            // HABKA ISKU DARKA AVERAGE-YADA (SIDA FASALKA 4AAD IYO FASALADA KALE)
+            // ----------------------------------------------------------------  
+            let totalPassScoreNeeded = 0;  
+            let maxTotalScorePossible = 0;  
+            
+            // Hubi haddii ardaygu yahay Fasalka 4-aad
+            const isGrade4 = cls.toString().includes("4") || cls.toString().includes("الرابع");
+  
+            // Xaddiga ugu badan ee imtixaan kasta (admin: Add Results / Max Marks); baasidda = 50%
+            const examIdByName = {};
+            allResults.forEach(d => { examIdByName[d.examName.replace(d.academicYear, "").replace(/[()]/g, "").trim()] = d.examId; });
+            const maxFor = (exName) => {
+                const eid = examIdByName[exName];
+                const m = examMaxMarks.find(x => x.academicYear === currentAcademicYear && x.className === cls && x.examId === eid);
+                const v = m ? parseFloat(m.maxMarks) : NaN;
+                return (isNaN(v) || v <= 0) ? null : v;
+            };
+
+            selectedExamsArr.forEach(exName => {  
+                const mx = maxFor(exName);
+                if (mx !== null) {
+                    totalPassScoreNeeded += mx / 2;
+                    maxTotalScorePossible += mx;
+                    return;
+                }
+                if (isGrade4) {
+                    // Sharciga Gaarka ah ee Fasalka 4aad
+                    if (exName.includes("النّصفي")) {  
+                        totalPassScoreNeeded += 12.5;  
+                        maxTotalScorePossible += 25;  
+                    } else if (exName.includes("النّهائي")) {  
+                        totalPassScoreNeeded += 12.5;  
+                        maxTotalScorePossible += 25;  
+                    } else if (exName.includes("الشّهري 1") || exName.trim() === "1") {  
+                        totalPassScoreNeeded += 7.5;   
+                        maxTotalScorePossible += 15;  
+                    } else if (exName.includes("الشّهري 2") || exName.trim() === "2") {  
+                        totalPassScoreNeeded += 7.5;   
+                        maxTotalScorePossible += 15;  
+                    } else if (exName.includes("الشّفوي")) {  
+                        totalPassScoreNeeded += 10;  
+                        maxTotalScorePossible += 20;  
+                    } else {  
+                        totalPassScoreNeeded += 50;  
+                        maxTotalScorePossible += 100;  
+                    }
+                } else {
+                    // Sharcigii caadiga ahaa ee Fasalada kale (1aad, 2aad, 3aad)
+                    if (exName.includes("النّصفي")) {  
+                        totalPassScoreNeeded += 20;  
+                        maxTotalScorePossible += 40;  
+                    } else if (exName.includes("الّنهائي")) {  
+                        totalPassScoreNeeded += 30;  
+                        maxTotalScorePossible += 60;  
+                    } 
+                }
+            });  
+  
+            let isPassed = parseFloat(studentAverage) >= totalPassScoreNeeded;  
+  
+            let inlineStatusHtml = '';  
+            if (isPassed) {  
+                inlineStatusHtml = `<span style="margin-right: 15px;">| التقدير : <span class="text-status-gudbay">ناجح (Baasay)</span></span>`;  
+            } else {  
+                inlineStatusHtml = `<span style="margin-right: 15px;">التقدير : <span class="text-status-haray">راسب (Dhacay)</span></span>`;  
+            }  
+            // ----------------------------------------------------------------  
+  
+            let subjectsMap = {};       
+            allResults.forEach(res => {      
+                const pScore = res.results.find(r => r.studentId === targetStudent.id);      
+                if(pScore) {      
+                    let cleanName = res.examName.replace(currentAcademicYear, "").replace(/[()]/g, "").trim();      
+                    if(!subjectsMap[res.subjectName]) subjectsMap[res.subjectName] = {};      
+                    subjectsMap[res.subjectName][cleanName] = parseFloat(pScore.score) || 0;      
+                }      
+            });      
+  
+            const totalColumns = 3 + selectedExamsArr.length;  
+  
+            let headerHtml = `<tr>      
+                <td class="bg-num" style="width: 8%;">الرقم</td>      
+                <td class="bg-sub" style="text-align: center;">الـمـواد</td>`;      
+                  
+            const headerColors = ["#f8d7da", "#cff4fc"];   
+            selectedExamsArr.forEach((exName, index) => {      
+                let bgColor = headerColors[index % headerColors.length];      
+                headerHtml += `<td style="background-color: ${bgColor} !important; text-align: center; font-weight: bold;">${exName}</td>`;      
+            });      
+            headerHtml += `<td class="bg-total" style="width: 15%;">المجموع</td></tr>`;      
+  
+            let rowsHtml = '';      
+            let rowIndex = 1;      
+            for (let subName in subjectsMap) {      
+                let subTotal = 0;      
+                let cellsHtml = '';      
+                selectedExamsArr.forEach(exName => {      
+                    let score = subjectsMap[subName][exName] || 0;      
+                    subTotal += score;      
+                    cellsHtml += `<td class="text-center">${score}</td>`;       
+                });      
+                      
+                rowsHtml += `<tr>      
+                    <td class="text-center">${rowIndex++}</td>       
+                    <td class="subject-name-cell">${subName}</td>      
+                    ${cellsHtml}      
+                    <td class="text-center text-bold" style="background-color: #fafafa;">${subTotal}</td>      
+                </tr>`;      
+            }      
+  
+            return `  
+                <div class="report-card-wrapper">  
+                      
+                    <img src="Logotasil.jpg" alt="Logo" class="report-card-header-img">  
+  
+                    <table class="unified-table">  
+                        <tbody>  
+                            <tr><td colspan="${totalColumns}" class="text-center text-bold" style="font-size: 13px; padding: 3px;">معهد التأصيل للعلوم الإسلامية والعربية</td></tr>  
+                            <tr><td colspan="${totalColumns}" class="text-center text-bold" style="font-size: 12px; padding: 2px;">الفرع الثانــــــــي</td></tr>  
+                            <tr><td colspan="${totalColumns}" class="text-center text-bold" style="font-size: 12px; padding: 2px;">كشف الدرجات لإمتحان الطالب</td></tr>  
+                            <tr><td colspan="${totalColumns}" class="text-center text-bold" style="font-size: 12px; padding: 2px;">العام الدراسي ${currentAcademicYear}</td></tr>  
+  
+                            <tr>  
+                                <td colspan="${totalColumns}" class="text-right text-bold" style="padding: 4px 6px; font-size: 12px;">  
+                                    الاسم : <span style="font-weight: normal; margin-right: 5px;">${targetStudent.name}</span>  
+                                </td>  
+                            </tr>  
+                            <tr>  
+                                <td colspan="${totalColumns}" class="text-right text-bold" style="padding: 4px 6px; font-size: 12px;">  
+                                    الفصل : <span style="font-weight: normal; margin-right: 5px;">${cls}</span>  
+                                </td>  
+                            </tr>  
+                            <tr>  
+                                <td colspan="${totalColumns}" class="text-right text-bold" style="padding: 4px 6px; font-size: 12px;">  
+                                    رقم الطالب (ID) : <span style="font-weight: normal; margin-right: 5px; margin-left: 5px;">${foundStudentID}</span>  
+                                    ${inlineStatusHtml}  
+                                </td>  
+                            </tr>  
+  
+                            ${headerHtml}  
+                            ${rowsHtml}  
+  
+                            <tr>  
+                                <td colspan="2" class="bg-summary-header text-center text-bold">المجموع</td>  
+                                <td colspan="${Math.floor(totalColumns - 3) || 2}" class="bg-summary-header text-center text-bold">النسبة المئوية %</td>  
+                                <td class="bg-summary-header text-center text-bold">المرتبة</td>  
+                            </tr>  
+  
+                            <tr style="text-align: center; font-weight: bold; font-size: 12px; background-color: #ffffff;">  
+                                <td colspan="2" style="padding: 4px;">${stInfo.total || 0}</td>  
+                                <td colspan="${Math.floor(totalColumns - 3) || 2}" style="padding: 4px;">${studentAverage}</td>  
+                                <td style="padding: 4px; color: #000;">${stInfo.rank || '-'}</td>  
+                            </tr>  
+                        </tbody>  
+                    </table>  
+  
+                    <div class="signature-section">  
+                        <div>توقيع المدير العام = _____________________</div>  
+                        <div class="mt-1">توقيع نائب المدير = _____________________</div>  
+                    </div>  
+  
+                </div>  
+            `;  
+  
+    }
+
+    window.checkStudentResultByID = async () => {  
+        const searchIdInput = document.getElementById('stuID').value.trim();  
+        const searchPassInput = document.getElementById('stuPass').value.trim();  
+        const loginArea = document.getElementById('loginArea');  
+        const resultArea = document.getElementById('result-display');  
+        const container = document.getElementById('spCardsContainer');   
+        const spinner = document.getElementById('loadingSpinner');  
+        const searchBtn = document.getElementById('searchBtn');  
+  
+        if (!searchIdInput || !searchPassInput) {      
+            alert("Fadlan qor ID-ga iyo Password-ka rasmiga ah!");      
+            return;      
+        }      
+  
+        const lastTwoDigits = searchIdInput.slice(-2);  
+        if (searchPassInput !== lastTwoDigits) {  
+            alert("Password-ka ama ID-ga waa khalad!");  
+            return;  
+        }  
+  
+        container.innerHTML = '';       
+        spinner.style.display = 'block';  
+        searchBtn.disabled = true;  
+  
+        const reset = () => { spinner.style.display = 'none'; searchBtn.disabled = false; };
+
+        // ID-ga ardayga waa ka go'an (studentCustomId) - marnaba lama beddelo marka arday qalin-jabiyo
+        let targetStudent = null;
+        let foundStudentID = "";
+        let gradHit = null;
+        let gradData = null;
+        let idConflict = false;
+        const sameKey = (a, b) => { // habka Firebase u kala horreeyo furayaasha
+            const ia = /^(0|-?[1-9]\d*)$/.test(a), ib = /^(0|-?[1-9]\d*)$/.test(b);
+            if (ia && ib) return Number(a) - Number(b);
+            if (ia) return -1; if (ib) return 1;
+            return a < b ? -1 : a > b ? 1 : 0;
+        };
+        const optional = async (path) => { try { const sn = await get(ref(db, path)); return sn.exists() ? sn.val() : {}; } catch (e) { return {}; } };
+        const hasCid = (o) => !!(o.studentCustomId && String(o.studentCustomId).trim());
+
+        try {
+            const stuMatches = cachedStudentsList.filter(st => hasCid(st) && String(st.studentCustomId).trim() === searchIdInput);
+
+            // Qalin-jabiyayaasha had iyo jeer waa la akhriyaa si loo hubiyo in ID-gu uu leeyahay hal qof oo keliya (fail-closed)
+            try {
+                const gs = await get(ref(db, 'graduated_students'));
+                gradData = gs.exists() ? gs.val() : {};
+            } catch (err) {
+                console.error("Cilad qalin-jabiyayaasha:", err);
+                alert("Cilad farsamo ayaa dhacday, mar kale isku day!");
+                reset();
+                return;
+            }
+            const gradMatches = [];
+            Object.keys(gradData).forEach(yk => Object.keys(gradData[yk] || {}).forEach(gid => {
+                const g = gradData[yk][gid];
+                if (hasCid(g) && String(g.studentCustomId).trim() === searchIdInput) gradMatches.push({ yk, id: gid, g });
+            }));
+            const hadExplicit = (stuMatches.length + gradMatches.length) > 0;
+            if (stuMatches.length + gradMatches.length > 1) {
+                idConflict = true;   // ID-gan waxaa leh in ka badan hal qof: natiijo lama tusayo
+            } else if (stuMatches.length === 1) {
+                targetStudent = stuMatches[0]; foundStudentID = searchIdInput;
+            } else if (gradMatches.length === 1) {
+                gradHit = gradMatches[0];
+            }
+            const gradKeys = [];
+            Object.values(gradData || {}).forEach(yr => Object.keys(yr || {}).forEach(k => gradKeys.push(k)));
+            const ordered = cachedStudentsList.map(st => st.id).concat(gradKeys).sort(sameKey);
+            const legacyIdOf = (key) => { const pos = ordered.indexOf(key); return pos === -1 ? null : String(2526 + pos); };
+
+            // 1) Arday hadda jira oo aan lahayn studentCustomId (ID-gooda hore waa la dhawraa)
+            if (!targetStudent && !hadExplicit) {
+                cachedStudentsList.forEach(st => {
+                    if (!hasCid(st) && legacyIdOf(st.id) === searchIdInput) { targetStudent = st; foundStudentID = searchIdInput; }
+                });
+            }
+            // 2) Arday qalin-jabiyay (ID-gooda lama beddelin)
+            if (!targetStudent && !hadExplicit) {
+                Object.keys(gradData || {}).forEach(yk => Object.keys(gradData[yk] || {}).forEach(gid => {
+                    const g = gradData[yk][gid];
+                    const match = hasCid(g) ? String(g.studentCustomId).trim() === searchIdInput : legacyIdOf(gid) === searchIdInput;
+                    if (match) gradHit = { yk, id: gid, g };
+                }));
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Cilad farsamo ayaa dhacday, mar kale isku day!");
+            reset();
+            return;
+        }
+
+        if (idConflict) {
+            alert("ID-gan waxaa leh in ka badan hal arday! Natiijo lama tusi karo. Fadlan la xiriir maamulka.");
+            reset();
+            return;
+        }
+        if (!targetStudent && !gradHit) {
+            alert("Waa khaldan yahay ID-gaaga, ama ardaygan lama diiwaangelin !");
+            reset();
+            return;
+        }
+
+        // ================= ARDAYGA QALIN-JABIYAY =================
+        if (gradHit) {
+            try {
+                const { yk, id, g } = gradHit;
+                const keyOf = (y, c) => fbKey(y) + '__' + fbKey(c);
+                const [blockedSnap, examsSnap, prevVis, exVis, myCtl, portalDisp, maxMarksObj] = await Promise.all([
+                    get(ref(db, 'blocked_student_results/' + id)),
+                    get(ref(db, 'exams')),
+                    optional('prev_results_visibility'),
+                    optional('exam_visibility'),
+                    optional('portal_student_control/' + id),
+                    optional('portal_display'),
+                    optional('exam_max_marks')
+                ]);
+                examMaxMarks = Object.values(maxMarksObj || {});
+                if (blockedSnap.val() === true || g.wasHidden === true) {
+                    alert("Natiijada ardaygan waa la xayiray! Fadlan la xiriir maamulka.");
+                    return;
+                }
+                const exams = [];
+                if (examsSnap.exists()) examsSnap.forEach(ch => exams.push({ id: ch.key, ...ch.val() }));
+                const examIdOf = (r) => { if (r.examId) return r.examId; const e = exams.find(x => x.examName === r.examName && x.year === r.academicYear); return e ? e.id : null; };
+                const examOk = (ae, eid) => !!(ae && (ae['All'] || (eid && ae[eid])));
+
+                // La fasaxay? Fur/Xidh gaar ah > sharciga sannadihii hore > sharciga fasalka uu ka qalin-jabiyay
+                const allowedRec = (r, gradClass, ctlMap) => {
+                    const k = keyOf(r.academicYear, r.className);
+                    const c = ctlMap[k];
+                    if (c && c.state === 'hide') return false;
+                    if (c && c.state === 'show') return true;
+                    const eid = examIdOf(r);
+                    const pv = prevVis[k];
+                    if (pv && examOk(pv.allowedExams, eid)) return true;
+                    if (r.className === gradClass) {
+                        const v = exVis[r.className];
+                        if (v && examOk(v.allowedExams, eid)) return true;
+                    }
+                    return false;
+                };
+                const toEntry = (r, sid) => ({ academicYear: r.academicYear, className: r.className, examName: r.examName, subjectName: r.subjectName, examId: examIdOf(r), results: [{ studentId: sid, score: r.score }] });
+
+                const mine = (g.results || []).filter(r => allowedRec(r, g.graduatedFromClass, myCtl));
+                if (!mine.length) {
+                    alert("Natiijada lama fasaxin weli !");
+                    return;
+                }
+
+                const gm = {};
+                mine.forEach(r => { const k = r.academicYear + '||' + r.className; (gm[k] = gm[k] || []).push(r); });
+                // Admin ayaa go'aamiya sanadka iyo fasalka la tusayo; ardaygu ma doorto
+                let gKeys = Object.keys(gm).sort().reverse();
+                const prItems = dispItems(portalDisp[fbKey(g.graduatedFromClass)]);
+                if (prItems.length) gKeys = gKeys.filter(k => prItems.some(x => k === x.year + '||' + x.className));
+                if (!gKeys.length) { alert("Natiijada lama fasaxin weli !"); return; }
+                if (!prItems.length) gKeys = gKeys.slice(0, 1);
+                const cards = gKeys.map(k => {
+                    const [ay, cn] = k.split('||');
+                    let entries = gm[k].map(r => toEntry(r, id));
+                    // Ardayda kale ee qalin-jabiyay isla fasalka iyo sannadka (si rank-ka loo xisaabiyo)
+                    Object.entries(gradData[yk] || {}).forEach(([pid, p]) => {
+                        if (pid === id || p.graduatedFromClass !== g.graduatedFromClass) return;
+                        (p.results || []).forEach(r => {
+                            if (r.academicYear === ay && r.className === cn && allowedRec(r, p.graduatedFromClass, {})) entries.push(toEntry(r, pid));
+                        });
+                    });
+                    entries = sortByOrder(entries, ((exVis[g.graduatedFromClass] || {}).order) || []);
+                    return { label: cn + ' — ' + ay, html: buildCard({ id, name: g.name }, searchIdInput, cn, entries) };
+                });
+
+                window.__spCards = cards.map(c => c.html);
+                window.__spShow = (i) => { document.getElementById('spCardHolder').innerHTML = window.__spCards[+i] || ''; };
+                const selector = '';
+                container.innerHTML = selector + `<div id="spCardHolder">${stackCards(cards)}</div>`;
+                loginArea.style.display = "none";
+                resultArea.style.display = "block";
+                window.scrollTo(0, 0);
+            } catch (error) {
+                console.error(error);
+                alert("Cilad farsamo ayaa dhacday, mar kale isku day!");
+            } finally {
+                reset();
+            }
+            return;
+        }
+
+        try {
+            // --- XAYIRAADDA ARDAYGA (dhammaan sannadaha iyo fasalada) ---
+            let hiddenStudentsList = {};
+            try {
+                const hiddenSnap = await get(ref(db, 'hidden_students'));
+                if (hiddenSnap.exists()) hiddenStudentsList = hiddenSnap.val();
+            } catch (err) {
+                console.error("Cilad baa ka dhacday hubinta xayiraadda:", err);
+            }
+            // blocked_student_results: haddii la akhrin waayo, ha la furin (fail-closed)
+            const blockedSnap = await get(ref(db, 'blocked_student_results/' + targetStudent.id));
+            if (hiddenStudentsList[targetStudent.id] === true || blockedSnap.val() === true) {
+                alert("Natiijada ardaygan waa la xayiray! Fadlan la xiriir maamulka.");
+                reset();
+                return;
+            }
+
+            const [visibilitySnap, resultsSnap, prevVis, myCtl, portalDisp, maxMarksObj] = await Promise.all([
+                get(ref(db, 'exam_visibility/' + targetStudent.class)),
+                get(ref(db, 'results')),
+                optional('prev_results_visibility'),
+                optional('portal_student_control/' + targetStudent.id),
+                optional('portal_display'),
+                optional('exam_max_marks')
+            ]);
+            examMaxMarks = Object.values(maxMarksObj || {});
+
+            const prItems = dispItems(portalDisp[fbKey(targetStudent.class)]);
+            const curOrder = visibilitySnap.exists() ? (visibilitySnap.val().order || []) : [];
+            const curAllowed = visibilitySnap.exists() ? (visibilitySnap.val().allowedExams || {}) : {};
+            const keyOf = (y, c) => fbKey(y) + '__' + fbKey(c);
+
+            // Dhammaan natiijooyinka ardayga, loo kooxeeyay (sanad + fasal)
+            const groups = {};
+            if (resultsSnap.exists()) {
+                resultsSnap.forEach(child => {
+                    const d = child.val();
+                    if (!(d.results || []).some(r => r.studentId === targetStudent.id)) return;
+                    const k = keyOf(d.academicYear, d.className);
+                    (groups[k] = groups[k] || { year: d.academicYear, cls: d.className, all: [] }).all.push(d);
+                });
+            }
+
+            // Hubi: la xidhay (Xidh), la furay (Fur), sharciga fasalka hadda, ama sharciga sannadihii hore
+            const examOk = (ae, d) => !!(ae && (ae['All'] || ae[d.examId]));
+            const visibleGroups = [];
+            const notHidden = Object.values(groups).filter(g => !(myCtl[keyOf(g.year, g.cls)] && myCtl[keyOf(g.year, g.cls)].state === 'hide'));
+
+            // Sanadka fasalka hadda ee la fasaxay (kan ugu dambeeya)
+            const curYears = [...new Set(notHidden.filter(g => g.cls === targetStudent.class && g.all.some(d => examOk(curAllowed, d))).map(g => g.year))].sort();
+            const curYear = curYears.length ? curYears[curYears.length - 1] : null;
+
+            notHidden.forEach(g => {
+                const k = keyOf(g.year, g.cls);
+                const ctl = myCtl[k];
+                let entries;
+                if (ctl && ctl.state === 'show') {
+                    entries = g.all;
+                } else if (g.cls === targetStudent.class && (g.year === curYear || prItems.some(x => x.year === g.year))) {
+                    entries = g.all.filter(d => examOk(curAllowed, d));
+                } else {
+                    const pv = prevVis[k];
+                    entries = pv ? g.all.filter(d => examOk(pv.allowedExams, d)) : [];
+                }
+                entries = sortByOrder(entries, curOrder);
+                if (entries.length) visibleGroups.push({ year: g.year, cls: g.cls, entries, isCurrent: g.cls === targetStudent.class && g.year === curYear });
+            });
+
+            // Haddii wax la fasaxay aysan jirin
+            if (visibleGroups.length === 0) {
+                alert("Natiijada lama fasaxin weli !");
+                reset();
+                return;
+            }
+
+            // Kan hadda ugu horreeya, kadibna sanadka ugu dambeeya
+            visibleGroups.sort((a, b) => (b.isCurrent - a.isCurrent) || String(b.year).localeCompare(String(a.year)));
+            // Admin ayaa go'aamiya sanadka iyo fasalka la tusayo; ardaygu ma doorto
+            if (prItems.length) {
+                const keep = visibleGroups.filter(g => prItems.some(x => x.year === g.year && x.className === g.cls));
+                visibleGroups.length = 0;
+                keep.forEach(g => visibleGroups.push(g));
+                if (visibleGroups.length === 0) {
+                    alert("Natiijada lama fasaxin weli !");
+                    reset();
+                    return;
+                }
+            } else {
+                visibleGroups.length = Math.min(visibleGroups.length, 1);
+            }
+            const cards = visibleGroups.map(g => ({ label: g.cls + ' — ' + g.year, html: buildCard(targetStudent, foundStudentID, g.cls, g.entries) }));
+            window.__spCards = cards.map(c => c.html);
+            window.__spShow = (i) => { document.getElementById('spCardHolder').innerHTML = window.__spCards[+i] || ''; };
+
+            const selector = '';
+            container.innerHTML = selector + `<div id="spCardHolder">${stackCards(cards)}</div>`;
+
+            loginArea.style.display = "none";
+            resultArea.style.display = "block";
+            window.scrollTo(0, 0);
+        } catch (error) {  
+            console.error(error);  
+            alert("Cilad farsamo ayaa dhacday, mar kale isku day!");  
+        } finally {  
+            spinner.style.display = 'none';  
+            searchBtn.disabled = false;  
+        }  
+    };  
+</script>  </body>  
+</html>
